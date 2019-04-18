@@ -1,1 +1,78 @@
+<style media="screen">
+  body {
+  	padding: 20px;
+  	height: 200vh;
+  }
+
+  .bubble {
+    width: 200pt;
+    height: 200pt;
+    background: blue;
+    border-radius: 100pt;
+    margin-top: 50vh;
+    position: absolute;
+  }
+</style>
+
+// import lax from './lib/lax.js'
+
+class Bubble extends React.Component {
+  componentDidMount() {
+    this.el = ReactDOM.findDOMNode(this)
+    lax.addElement(this.el)
+  }
+
+  componentWillUnmount() {
+    lax.removeElement(this.el)
+  }
+
+  render() {
+    return (
+      <div
+        className='bubble'
+        data-lax-preset="leftToRight fadeInOut"
+      ></div>
+    )
+  }
+}
+
+class App extends React.Component {
+	constructor(props) {
+    super(props)
+    this.state = { showBubble: false }
+    lax.setup()
+
+    document.addEventListener('scroll', function(x) {
+      lax.update(window.scrollY)
+    }, false)
+
+    lax.update(window.scrollY)
+  }
+
+  toggleBubble = () => {
+    this.setState({
+      showBubble: !this.state.showBubble
+    })
+  }
+
+	// React components are simple functions that take in props and state, and render HTML
+	render() {
+		 const text = this.state.showBubble ? "..now scroll down.." : "^ press the button ^"
+
+		 const bubble = this.state.showBubble ? (<Bubble></Bubble>) : ""
+
+		 return (
+			<div>
+				<button onClick={this.toggleBubble} style={{fontSize: 18}}>Toggle Bubble</button>
+				<p>{text}</p>
+				{ bubble }
+      </div>
+		 );
+	}
+}
+
+ReactDOM.render(<App />, document.getElementById('app'));
+
+<div id="app"></div>
+
 Hello World
